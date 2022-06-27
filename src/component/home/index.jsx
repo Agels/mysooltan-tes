@@ -1,12 +1,16 @@
 import { Card, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { repolist } from "../../app/actions/repoAction";
 import moment from "moment";
 import Search from "../search";
 import "moment-timezone";
-import { propTypes } from "react-bootstrap/esm/Image";
+
 const Home = () => {
-  const [repo, setRepo] = useState([]);
+  const dispatch = useDispatch();
+  const repo = useSelector((state) => state.repo.repo);
+
   const [img, setImg] = useState({});
   const [search, setSearch] = useState("");
   useEffect(() => {
@@ -14,7 +18,7 @@ const Home = () => {
       .get(
         "https://api.github.com/users/Agels/repos?sort=created&direction=desc"
       )
-      .then((res) => setRepo(res.data));
+      .then((res) => dispatch(repolist(res.data)));
   }, []);
   useEffect(() => {
     axios
@@ -22,34 +26,24 @@ const Home = () => {
       .then((res) => setImg(res.data));
   }, []);
 
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value);
-  };
-
   const filtered = !search
     ? repo
     : repo.filter((person) =>
         person.name.toLowerCase().includes(search.toLowerCase())
       );
-      console.log(filtered)
   return (
     <Container className="mt-5">
       <Row>
         <Col lg={4}>
-          <img
-            src={img.avatar_url}
-            className="rounded-circle w-50"
-            alt="img"
-          />
-          <p>{img.login}</p> 
+          <img src={img.avatar_url} className="rounded-circle w-50" alt="img" />
+          <p>{img.login}</p>
         </Col>
         <Col lg={8}>
-        <Search onChange={handleSearchChange} value={search} />
-        {filtered.map((el) => {
-          return (
+          <Search onChange={(e) => setSearch(e.target.value)} value={search} />
+          {filtered.map((el) => {
+            return (
               <Card style={{ width: "18rem" }}>
                 <Card.Body>
-                  {/* {console.log(el)} */}
                   <Card.Title>{el.name}</Card.Title>
                   <Card.Text>
                     {el.language} &nbsp;&nbsp;&nbsp;updated on{" "}
@@ -58,8 +52,8 @@ const Home = () => {
                   <Button variant="primary">Go somewhere</Button>
                 </Card.Body>
               </Card>
-          );
-        })}
+            );
+          })}
         </Col>
       </Row>
     </Container>
