@@ -8,12 +8,7 @@ const Avatar = () => {
     const avatars = useSelector(state => state.repo.avatar);
     useEffect(() => {
         axios
-          .get("https://api.github.com/users/Agels", 
-          {
-            headers: {
-              authorization: `token ${token}`
-            }
-          })
+          .get("https://api.github.com/users/Agels")
           .then((res) =>dispatch(avatar(res.data)));
       }, []);
     return (
