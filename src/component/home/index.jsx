@@ -31,7 +31,7 @@ const Home = () => {
 
   return (
     <div style={style}>
-      <Container className="">
+      <Container>
         <Row>
           <Col lg={4}>
             <Avatar />
