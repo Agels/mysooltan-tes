@@ -11,12 +11,16 @@ import {cardStyle,doted,style} from '../css/css';
 const Home = () => {
   const dispatch = useDispatch();
   const repo = useSelector((state) => state.repo.repo);
+  const token = useSelector((state) => state.repo.token);
   const [type, setType] = useState("created&direction=desc");
   const [search, setSearch] = useState("");
   useEffect(() => {
     axios
-      .get(`https://api.github.com/users/Agels/repos?sort=${type}`
-      )
+      .get(`https://api.github.com/users/Agels/repos?sort=${type}`, {
+        headers: {
+          authorization: `token ${token}`,
+        },
+      })
       .then((res) => dispatch(repolist(res.data)));
   }, [type]);
   const filtered = !search

@@ -4,10 +4,16 @@ import { useSelector, useDispatch } from "react-redux";
 import {avatar} from '../../app/actions/repoAction';
 const Avatar = () => {
     const dispatch = useDispatch();
+    const token = useSelector((state) => state.repo.token);
     const avatars = useSelector(state => state.repo.avatar);
     useEffect(() => {
         axios
-          .get("https://api.github.com/users/Agels")
+          .get("https://api.github.com/users/Agels", 
+          {
+            headers: {
+              authorization: `token ${token}`
+            }
+          })
           .then((res) =>dispatch(avatar(res.data)));
       }, []);
     return (
