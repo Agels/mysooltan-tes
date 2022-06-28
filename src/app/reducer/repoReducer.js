@@ -2,8 +2,7 @@ import {AVATAR, REPO} from '../constant/constant';
 
 const initialState = {
     repo:[],
-    avatar:{},
-    token:"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"
+    avatar:{}
 }
 
 export const repoReducer = (state = initialState,{type,payload}) => {
